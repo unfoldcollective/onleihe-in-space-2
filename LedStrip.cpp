@@ -16,7 +16,7 @@ class LedStrip {
     bool blinkBool;
   
   public:
-    LedStrip (int ledPin, int ledCount) {
+    LedStrip (uint16_t ledPin, uint8_t ledCount) {
       leds = Adafruit_NeoPixel(ledCount, ledPin, NEO_GRB + NEO_KHZ800);
     }
 
@@ -89,7 +89,7 @@ class LedStrip {
 
       float intervalEase = duration/nSteps;
       
-      if ((unsigned long)(currentMillis - previousMillisEase) > intervalEase) {        
+      if ((unsigned long)(currentMillis - previousMillisEase) > intervalEase) {
         easedPosition = ease.easeInOut(currentTEase);
         rounded = round(easedPosition);
         diff = rounded - last;
