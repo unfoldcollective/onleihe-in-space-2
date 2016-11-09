@@ -8,29 +8,66 @@
 #define MPR121_ADDR 0x5C
 #define MPR121_INT 4
 
-
-// LED definitions
-#define LED_PIN       8
-#define NO_LEDS      50
-
-// Animation Settings
-#define UP_TO        30
-#define SENSOR_INDEX 10
-LedStrip leds = LedStrip(LED_PIN, NO_LEDS);
-LedStrip leds2 = LedStrip(LED_PIN, NO_LEDS);
-
-const int      BNS        = 30; // BRIGHTNESS
-const uint32_t WHITE      = leds.Color(BNS, BNS, BNS);
-const uint32_t GREEN      = leds.Color(0  , 100, 0);
-const uint32_t BLACK      = leds.Color(0  , 0  , 0);
-
-const int      easeOutDur = 2000;
-const int      pauseDur   = 1000;
-const int      easeInDur  = 3000;
+// Global animation vars
+const int easeOutDur = 2000;
+const int pauseDur   = 5000;
+const int easeInDur  = 3000;
 
 bool shouldEaseOutBottom;
 bool shouldEaseOutTop;
 bool shouldEaseIn;
+bool shouldEaseToPrinter;
+// Animation Settings
+#define UP_TO          25
+#define SENSOR_INDEX 10
+#define PRINTER_INDEX1 68
+
+// LED Strip 1
+#define LED_PIN1       8
+#define NO_LEDS1      78
+#define UP_TO1        77
+#define SENSOR_INDEX1 54
+LedStrip leds1a = LedStrip(LED_PIN1, NO_LEDS1);
+LedStrip leds1b = LedStrip(LED_PIN1, NO_LEDS1);
+
+// LED Strip 2
+#define LED_PIN2      9
+#define NO_LEDS2     66
+LedStrip leds2 = LedStrip(LED_PIN2, NO_LEDS2);
+
+// LED Strip 3
+#define LED_PIN3     10
+#define NO_LEDS3     30
+LedStrip leds3 = LedStrip(LED_PIN3, NO_LEDS3);
+
+// LED Strip 4
+#define LED_PIN4     11
+#define NO_LEDS4     30
+LedStrip leds4 = LedStrip(LED_PIN4, NO_LEDS4);
+
+// LED Strip 5
+#define LED_PIN5     12
+#define NO_LEDS5     NO_LEDS1
+LedStrip leds5 = LedStrip(LED_PIN5, NO_LEDS5);
+
+// Global colors
+const int      BNS        = 30; // BRIGHTNESS
+const uint32_t WHITE      = leds1a.Color(BNS, BNS, BNS);
+const uint32_t GREEN      = leds1a.Color(  0, 100,   0);
+const uint32_t BLUE       = leds1a.Color(  0,   0, 100);
+const uint32_t RED        = leds1a.Color(100,   0,   0);
+const uint32_t BLACK      = leds1a.Color(  0,   0,   0);
+// Goethe identity colors
+const uint32_t GOETHE     = leds1a.Color(160, 200,  20);
+const uint32_t GPURPLE    = leds1a.Color(130,   5,  95);
+const uint32_t GGREEN     = leds1a.Color( 55,  65,   5);
+const uint32_t GORANGE    = leds1a.Color(235, 100,   0);
+
+const uint32_t COLOR1     = GPURPLE;
+const uint32_t COLOR2     = GGREEN;
+const uint32_t COLOR3     = GPURPLE;
+const uint32_t COLOR4     = GORANGE;
+
 
 void setup(){  
   Serial.begin(57600);
@@ -42,11 +79,35 @@ void setup(){
   MPR121.setTouchThreshold(40);
   MPR121.setReleaseThreshold(20);
 
-  leds.begin();
-  leds.clear();
-  leds.show();
-  leds.colorRange(1,UP_TO, WHITE);
-   
+  leds1a.begin();
+  leds1a.clear();
+  leds1a.show();
+  leds1a.colorRange(1,UP_TO1, COLOR1);
+
+  leds2.begin();
+  leds2.clear();
+  leds2.show();
+  leds2.colorRange(1,UP_TO, COLOR2);
+
+  leds3.begin();
+  leds3.clear();
+  leds3.show();
+  leds3.colorRange(1,UP_TO, COLOR3);
+  
+  leds4.begin();
+  leds4.clear();
+  leds4.show();
+  leds4.colorRange(1,UP_TO, COLOR4);
+
+  leds5.begin();
+  leds5.clear();
+  leds5.show();
+  leds5.colorRange(1,UP_TO1, COLOR1);
+
+  // NOTE: SOME PRINTERS NEED 9600 BAUD instead of 19200, check test page.
+  mySerial.begin(19200);  // Initialize SoftwareSerial
+  //Serial1.begin(19200); // Use this instead if using hardware serial
+  printer.begin();        // Init printer (same regardless of serial type)
 }
 
 void loop(){
@@ -55,31 +116,44 @@ void loop(){
   readTouchInputs();
   
   if(shouldEaseOutBottom){
-    shouldEaseOutBottom = leds.easeInRangeMillis(currentMillis, 1,SENSOR_INDEX, easeOutDur,BLACK);
+    shouldEaseOutBottom = leds1a.easeInRangeMillis(currentMillis, 1,SENSOR_INDEX1, easeOutDur,BLACK);
     if (!shouldEaseOutBottom){
       Serial.println("Ease Out Bottom Ended");
       onEaseBottomEnd();
     }
   }
   if(shouldEaseOutTop){
-    shouldEaseOutTop = leds2.easeInRangeMillis(currentMillis, UP_TO,SENSOR_INDEX+1, easeOutDur,BLACK);
+    shouldEaseOutTop = leds1b.easeInRangeMillis(currentMillis, UP_TO1,SENSOR_INDEX1+1, easeOutDur,BLACK);
     if (!shouldEaseOutTop){
       Serial.println("Ease Out Top Ended");
       onEaseTopEnd();
     }
   }
   if(shouldEaseIn){
-    shouldEaseIn = leds.easeInRangeMillis(currentMillis, 1,UP_TO, easeInDur,WHITE);
+    shouldEaseIn = leds1a.easeInRangeMillis(currentMillis, 1,UP_TO1, easeInDur,COLOR1);
     if (!shouldEaseIn){
       Serial.println("Ease In Ended");
       onEaseInEnd();
     }
   }
+  if(shouldEaseToPrinter){
+    shouldEaseToPrinter = leds1a.easeInRangeMillis(currentMillis, SENSOR_INDEX1,PRINTER_INDEX1, easeInDur,COLOR1);
+    if (!shouldEaseToPrinter){
+      Serial.println("Ease To Printer Ended");
+      onEaseToPrinterEnd();
+    }
+  }
+}
+
+void onEaseToPrinterEnd () {
+  leds1a.colorRange(SENSOR_INDEX1,PRINTER_INDEX1, COLOR1);
+  printQuote();
+  shouldEaseIn = true;
 }
 
 void onEaseBottomEnd(){
-  delay(pauseDur);
-  shouldEaseIn = true;
+//  delay(pauseDur);
+  shouldEaseToPrinter = true;
 }
 
 void onEaseTopEnd(){
@@ -87,7 +161,7 @@ void onEaseTopEnd(){
 }
 
 void onEaseInEnd(){
-  leds.colorRange(1,UP_TO, WHITE);
+  leds1a.colorRange(1,UP_TO1, COLOR1);
 }
 
 void touch(){
