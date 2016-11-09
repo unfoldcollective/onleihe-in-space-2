@@ -1,6 +1,7 @@
 // compiler error handling
 #include "Compiler_Errors.h"
 #include "LedStrip.cpp"
+#include "Adafruit_Thermal.h"
 
 // touch includes
 #include <MPR121.h>
@@ -19,7 +20,7 @@ bool shouldEaseIn;
 bool shouldEaseToPrinter;
 // Animation Settings
 #define UP_TO          25
-#define SENSOR_INDEX 10
+#define SENSOR_INDEX   10
 #define PRINTER_INDEX1 68
 
 // LED Strip 1
@@ -68,8 +69,27 @@ const uint32_t COLOR2     = GGREEN;
 const uint32_t COLOR3     = GPURPLE;
 const uint32_t COLOR4     = GORANGE;
 
+////////////////////
+// Termal Printer //
+////////////////////
 
-void setup(){  
+// Here's the new syntax when using SoftwareSerial (e.g. Arduino Uno) ----
+// If using hardware serial instead, comment out or remove these lines:
+
+#include "SoftwareSerial.h"
+#define TX_PIN 5 // Arduino transmit  YELLOW WIRE  labeled RX on printer
+#define RX_PIN 6 // Arduino receive   GREEN WIRE   labeled TX on printer
+
+SoftwareSerial mySerial(RX_PIN, TX_PIN); // Declare SoftwareSerial obj first
+Adafruit_Thermal printer(&mySerial);     // Pass addr to printer constructor
+// Then see setup() function regarding serial & printer begin() calls.
+
+// Here's the syntax for hardware serial (e.g. Arduino Due) --------------
+// Un-comment the following line if using hardware serial:
+
+//Adafruit_Thermal printer(&Serial1);      // Or Serial2, Serial3, etc.
+
+void setup(){
   Serial.begin(57600);
 //  if(!sd.begin(SD_SEL, SPI_HALF_SPEED)) sd.initErrorHalt();
 
@@ -172,6 +192,100 @@ void touch(){
 
 void untouch(){
   // pass
+}
+
+void printQuote() {
+  printer.println();
+  
+  printer.setSize('L');        // Set type size, accepts 'S', 'M', 'L'
+  printer.justify('C');
+  printer.setLineHeight(50);
+
+  printer.println(F("\"Mlcanie"));
+  printer.println(F("je jedna"));
+  printer.println(F("z vlastnosti"));
+  printer.println(F("dokonalosti.\""));
+
+  printer.setLineHeight();
+  printer.setSize('S');
+  
+  printer.println();
+  printer.println(F("Franz Kafka|Das Schloß"));
+  printer.print(F("("));
+
+  printer.inverseOn();
+  printer.print(F(" EAUDIO "));
+  printer.inverseOff();
+  
+  printer.print(F(", "));
+  
+  printer.inverseOn();
+  printer.print(F(" EBOOK "));
+  printer.inverseOff();
+  printer.println(F(")"));
+
+  
+  printer.justify('L');
+
+  
+  printer.println();
+  printer.println();
+
+  printer.println(F("Hladas viac knih, alebo by si"));
+  printer.println(F("rad videl pribehy z kníh na"));
+  printer.println(F("inych mediach? Chcel by si si"));
+  printer.println(F("pozicat knihy kdekolvek? "));
+  printer.println(F("Digitalna kniznica \"Onleihe\" "));
+  printer.print(F("ti ponuka viac nez 14 000 medii od "));
+//  inych mediach? Chcel by si si pozicat knihy kdekolvek? Digitalna kniznica \"Onleihe\" ti ponuka viac než 14 000 medii od "));
+  printer.inverseOn();
+  printer.print(F(" E-KNIH ")); 
+  printer.inverseOff();
+  printer.print(F(" cez ")); 
+  printer.inverseOn();
+  printer.print(F(" HUDBU "));
+  printer.inverseOff();
+  printer.print(F(", "));
+  printer.inverseOn();
+  printer.print(F(" AUDIO-KNIHY "));
+  printer.inverseOff();
+  printer.print(F(" az po "));
+  printer.inverseOn();
+  printer.print(F(" FILMY "));
+  printer.inverseOff();
+  printer.print(F(" pristupne  "));
+  printer.println(F("v tvojom vrecku."));
+  
+  printer.println();
+  printer.println();
+  
+  printer.println(F("Ako na to?"));
+  printer.println(F("1.Zaregistruj si Onleihe ucet")); 
+  printer.print(F(" " ));
+  printer.println(F(" cez bit.ly/mygoethe"));
+
+  printer.println(F("2.Stiahni si sikovnu mobilnu"));
+  printer.println(F("  aplikaciu cez "));
+
+  printer.println(F("    onelink.to/onleihe"));
+  
+  printer.println(F("3.Prihlas sa"));
+  printer.println(F("4.Teraz mozes citat, pozerat"));
+  printer.println(F("  a pocuvat na svojom telefone."));
+
+  
+  printer.println();
+
+  printer.println(F("Onleihe funguje aj na tvojom po-citaci alebo tablete. Zaregi-   struj sa cez bit.ly/mygoethe    alebo sa prihlas na my.goethe.de"));
+
+  printer.println();
+  printer.println();
+  printer.feed(2);
+
+  printer.sleep();      // Tell printer to sleep
+  delay(3000L);         // Sleep for 3 seconds
+  printer.wake();       // MUST wake() before printing again, even if reset
+  printer.setDefault(); // Restore printer to defaults
 }
 
 void readTouchInputs(){
