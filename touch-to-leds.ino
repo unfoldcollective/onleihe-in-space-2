@@ -23,7 +23,7 @@ bool shouldEaseToPrinter;
 #define SENSOR_INDEX   10
 #define PRINTER_INDEX1 68
 
-// LED Strip 1
+// LED Strip 1: the interactive strip
 #define LED_PIN1       8
 #define NO_LEDS1      78
 #define UP_TO1        77
@@ -33,17 +33,20 @@ LedStrip leds1b = LedStrip(LED_PIN1, NO_LEDS1);
 
 // LED Strip 2
 #define LED_PIN2      9
-#define NO_LEDS2     66
+#define NO_LEDS2     60
+#define UP_TO2       60
 LedStrip leds2 = LedStrip(LED_PIN2, NO_LEDS2);
 
 // LED Strip 3
 #define LED_PIN3     10
-#define NO_LEDS3     30
+#define NO_LEDS3     66
+#define UP_TO3       66
 LedStrip leds3 = LedStrip(LED_PIN3, NO_LEDS3);
 
 // LED Strip 4
 #define LED_PIN4     11
 #define NO_LEDS4     30
+#define UP_TO4       30
 LedStrip leds4 = LedStrip(LED_PIN4, NO_LEDS4);
 
 // LED Strip 5
@@ -66,8 +69,8 @@ const uint32_t GORANGE    = leds1a.Color(235, 100,   0);
 
 const uint32_t COLOR1     = GPURPLE;
 const uint32_t COLOR2     = GGREEN;
-const uint32_t COLOR3     = GPURPLE;
-const uint32_t COLOR4     = GORANGE;
+const uint32_t COLOR3     = GORANGE;
+const uint32_t COLOR4     = GOETHE;
 
 ////////////////////
 // Termal Printer //
@@ -107,17 +110,17 @@ void setup(){
   leds2.begin();
   leds2.clear();
   leds2.show();
-  leds2.colorRange(1,UP_TO, COLOR2);
+  leds2.colorRange(1,UP_TO2, COLOR2);
 
   leds3.begin();
   leds3.clear();
   leds3.show();
-  leds3.colorRange(1,UP_TO, COLOR3);
+  leds3.colorRange(1,UP_TO3, COLOR3);
   
   leds4.begin();
   leds4.clear();
   leds4.show();
-  leds4.colorRange(1,UP_TO, COLOR4);
+  leds4.colorRange(1,UP_TO4, COLOR4);
 
   leds5.begin();
   leds5.clear();
