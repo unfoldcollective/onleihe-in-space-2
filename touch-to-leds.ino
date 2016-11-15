@@ -171,7 +171,9 @@ void loop(){
 
 void onEaseToPrinterEnd () {
   leds1a.colorRange(SENSOR_INDEX1,PRINTER_INDEX1, COLOR1);
-  printQuote();
+//  printQuoteKafka();
+  printQuoteGoethe();
+  printInfo();
   shouldEaseIn = true;
 }
 
@@ -198,12 +200,12 @@ void untouch(){
   // pass
 }
 
-void printQuote() {
-  printer.println();
-  
+void printQuoteKafka() {
   printer.setSize('L');        // Set type size, accepts 'S', 'M', 'L'
   printer.justify('C');
   printer.setLineHeight(50);
+
+  printer.println();
 
   printer.println(F("\"Mlcanie"));
   printer.println(F("je jedna"));
@@ -227,14 +229,44 @@ void printQuote() {
   printer.print(F(" EBOOK "));
   printer.inverseOff();
   printer.println(F(")"));
-
   
+  printer.println();
+  printer.println(); 
+}
+
+void printQuoteGoethe() {
+  printer.setSize('L');        // Set type size, accepts 'S', 'M', 'L'
+  printer.justify('C');
+  printer.setLineHeight(50);
+
+  printer.println();
+
+  printer.println(F("\"Clovek zije"));
+  printer.println(F("skutocny zivot,"));
+  printer.println(F("ked je stastny"));
+  printer.println(F("stastim"));
+  printer.println(F("druhych.\""));
+
+  printer.setLineHeight();
+  printer.setSize('S');
+  
+  printer.println();
+  printer.println(F("Johann Wolfgang Goethe | Garten-"));
+  printer.println(F("gluck mit Johann Wolfgang Goethe"));
+ 
+  
+  printer.print(F("("));
+  printer.inverseOn();
+  printer.print(F(" EBOOK "));
+  printer.inverseOff();
+  printer.println(F(")"));
+  
+  printer.println();
+  printer.println(); 
+}
+
+void printInfo() {
   printer.justify('L');
-
-  
-  printer.println();
-  printer.println();
-
   printer.println(F("Hladas viac knih, alebo by si"));
   printer.println(F("rad videl pribehy z kníh na"));
   printer.println(F("inych mediach? Chcel by si si"));
@@ -261,23 +293,6 @@ void printQuote() {
   printer.println(F("v tvojom vrecku."));
   
   printer.println();
-  printer.println();
-  
-  printer.println(F("Ako na to?"));
-  printer.println(F("1.Zaregistruj si Onleihe ucet")); 
-  printer.print(F(" " ));
-  printer.println(F(" cez bit.ly/mygoethe"));
-
-  printer.println(F("2.Stiahni si sikovnu mobilnu"));
-  printer.println(F("  aplikaciu cez "));
-
-  printer.println(F("    onelink.to/onleihe"));
-  
-  printer.println(F("3.Prihlas sa"));
-  printer.println(F("4.Teraz mozes citat, pozerat"));
-  printer.println(F("  a pocuvat na svojom telefone."));
-
-  
   printer.println();
 
   printer.println(F("Onleihe funguje aj na tvojom po-citaci alebo tablete. Zaregi-   struj sa cez bit.ly/mygoethe    alebo sa prihlas na my.goethe.de"));
