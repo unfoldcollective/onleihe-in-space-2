@@ -21,20 +21,20 @@ bool shouldEaseToPrinter;
 // Animation Settings
 #define UP_TO          25
 #define SENSOR_INDEX   10
-#define PRINTER_INDEX1 68
+#define PRINTER_INDEX1 77
 
 // LED Strip 1: the interactive strip
 #define LED_PIN1       8
 #define NO_LEDS1      78
-#define UP_TO1        77
-#define SENSOR_INDEX1 54
+#define UP_TO1        72
+#define SENSOR_INDEX1 66
 LedStrip leds1a = LedStrip(LED_PIN1, NO_LEDS1);
 LedStrip leds1b = LedStrip(LED_PIN1, NO_LEDS1);
 
 // LED Strip 2
 #define LED_PIN2      9
-#define NO_LEDS2     60
-#define UP_TO2       60
+#define NO_LEDS2     40
+#define UP_TO2       40
 LedStrip leds2 = LedStrip(LED_PIN2, NO_LEDS2);
 
 // LED Strip 3
