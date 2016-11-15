@@ -57,6 +57,7 @@ LedStrip leds5 = LedStrip(LED_PIN5, NO_LEDS5);
 // Global colors
 const int      BNS        = 30; // BRIGHTNESS
 const uint32_t WHITE      = leds1a.Color(BNS, BNS, BNS);
+const uint32_t WARMGRAY   = leds1a.Color(110, 98, 89);
 const uint32_t GREEN      = leds1a.Color(  0, 100,   0);
 const uint32_t BLUE       = leds1a.Color(  0,   0, 100);
 const uint32_t RED        = leds1a.Color(100,   0,   0);
@@ -67,10 +68,10 @@ const uint32_t GPURPLE    = leds1a.Color(130,   5,  95);
 const uint32_t GGREEN     = leds1a.Color( 55,  65,   5);
 const uint32_t GORANGE    = leds1a.Color(235, 100,   0);
 
-const uint32_t COLOR1     = GPURPLE;
-const uint32_t COLOR2     = GGREEN;
-const uint32_t COLOR3     = GORANGE;
-const uint32_t COLOR4     = GOETHE;
+const uint32_t COLOR1     = WARMGRAY; //GPURPLE;
+const uint32_t COLOR2     = WARMGRAY; //GGREEN;
+const uint32_t COLOR3     = WARMGRAY; //GORANGE;
+const uint32_t COLOR4     = WARMGRAY; //GOETHE;
 
 ////////////////////
 // Termal Printer //
