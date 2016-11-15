@@ -174,6 +174,7 @@ void onEaseToPrinterEnd () {
 //  printQuoteKafka();
   printQuoteGoethe();
   printInfo();
+  leds1a.colorRange(SENSOR_INDEX1,PRINTER_INDEX1, BLACK);
   shouldEaseIn = true;
 }
 
