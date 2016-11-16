@@ -217,7 +217,7 @@ void printQuoteKafka() {
   printer.setSize('S');
   
   printer.println();
-  printer.println(F("Franz Kafka|Das Schloß"));
+  printer.println(F("Franz Kafka | Das Schloss"));
   printer.print(F("("));
 
   printer.inverseOn();
