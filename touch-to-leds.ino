@@ -171,8 +171,8 @@ void loop(){
 
 void onEaseToPrinterEnd () {
   leds1a.colorRange(SENSOR_INDEX1,PRINTER_INDEX1, COLOR1);
-//  printQuoteKafka();
-  printQuoteGoethe();
+  printQuoteKafka();
+//  printQuoteGoethe();
   printInfo();
   leds1a.colorRange(SENSOR_INDEX1,PRINTER_INDEX1, BLACK);
   shouldEaseIn = true;
